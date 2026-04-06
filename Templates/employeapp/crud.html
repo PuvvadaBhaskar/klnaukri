@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Crud</title>
+    <link rel="stylesheet" href="{%static 'css/crud.css'%}"></link>
+</head>
+<body>
+{%block body %}
+<div class="container">
+    <div class="crud-grid">
+        <!-- CREATE -->
+        <div class="col">
+            <h2>Create</h2>
+            <form method="post" action="{% url 'crud_insert' %}">
+                    {% csrf_token %}
+                <div class="input-group">
+                <label for="empid">Employee ID</label>
+                <input type="number" id="empid" name="empid" placeholder="Enter Employee ID">
+
+                <label for="empname">Employee Name</label>
+                <input type="text" id="empname" name="empname" placeholder="Enter Employee Name">
+
+                <label for="emploc">Employee Location</label>
+                <input type="text" id="emploc" name="emploc" placeholder="Enter Employee Location">
+
+                <label for="empphone">Employee Phone</label>
+                <input type="text" id="empphone" name="empphone" placeholder="Enter Phone Number">
+
+                <label for="empemail">Email</label>
+                <input type="email" id="empemail" name="empemail" placeholder="Enter Email" required>
+            </div>
+            <button class="btn" type="submit">Save</button>
+            </form>
+        </div>
+        <!-- READ -->
+        <div class="col">
+            <h2>Read</h2>
+            <form method="post" action="{% url 'read_employee' %}">
+    {% csrf_token %}
+    <label>Select Employee Id </label>
+
+    <select name="read_empid" required>
+        <option value=""> -- Select Emp Id -- </option>
+        {% for emp in employees %}
+        <option value="{{ emp.employee_id }}">{{ emp.employee_id }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Submit</button>
+</form>
+            {% if selected_emp %}
+<div>
+    <h3>Employee Details</h3>
+    <p>ID: {{ selected_emp.employee_id }}</p>
+    <p>Name: {{ selected_emp.employee_name }}</p>
+    <p>Location: {{ selected_emp.employee_location }}</p>
+    <p>Phone: {{ selected_emp.empoyee_phone }}</p>
+    <p>Email: {{ selected_emp.employee_email }}</p>
+</div>
+{% endif %}
+
+        </div>
+
+        <!-- UPDATE -->
+        <!-- UPDATE -->
+<div class="col">
+    <h2>Update</h2>
+
+    <!-- Fetch Employee -->
+    <form method="post" action="{% url 'update_employee' %}">
+        {% csrf_token %}
+
+        <label>Select Employee ID</label>
+        <select name="empid" required>
+            <option value="">-- Select Emp ID --</option>
+            {% for emp in employees %}
+                <option value="{{ emp.employee_id }}">{{ emp.employee_id }}</option>
+            {% endfor %}
+        </select>
+
+        <button class="btn" type="submit" name="fetch">Fetch</button>
+    </form>
+
+    <!-- Update Form -->
+    {% if update_emp %}
+    <form method="post" action="{% url 'update_employee' %}">
+        {% csrf_token %}
+        <input type="hidden" name="empid" value="{{ update_emp.employee_id }}">
+
+        <div class="input-group">
+            <label>Name</label>
+            <input type="text" name="empname" value="{{ update_emp.employee_name }}">
+
+            <label>Location</label>
+            <input type="text" name="emploc" value="{{ update_emp.employee_location }}">
+
+            <label>Phone</label>
+            <input type="text" name="empphone" value="{{ update_emp.employee_phone }}">
+            <label>Email</label>
+            <input type="text" name="empemail" value="{{ update_emp.employee_email }}">
+        </div>
+
+        <button class="btn" type="submit" name="update">Update</button>
+    </form>
+    {% endif %}
+
+    {% if update_msg %}
+        <p>{{ update_msg }}</p>
+    {% endif %}
+</div>
+
+        <!-- DELETE -->
+        <div class="col">
+            <h2>Delete</h2>
+            <form method="post" action="{% url 'delete_employee' %}">
+        {% csrf_token %}
+
+        <label>Select Employee ID</label>
+        <select name="employee_id" required>
+            <option value="">-- Select Emp ID --</option>
+            {% for emp in employees %}
+                <option value="{{ emp.employee_id }}">{{ emp.employee_id }}</option>
+            {% endfor %}
+        </select>
+<br><br>
+        <button class="btn delete-btn" type="submit">
+            Delete
+        </button>
+                <br><br>
+    </form>
+
+    {% if delete_msg %}
+        <div class="result">{{ delete_msg }}</div>
+    {% endif %}
+</div>
+        </div>
+    </div>
+</div>
+<button class="btn" onclick="window.location.href='{% url 'admin_home' %}'">
+    Back to Admin Home
+</button>
+{%endblock%}
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends "navbar/adminnavbar.html" %}
+{% load static %}
+<html>
+<body>
+{% block body %}
+<div class="card shadow-sm">
+    <div class="card-header bg-success text-white">
+        <h2 class="mb-0">Add Job Seeker Profile</h2>
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Profile</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+</body>
+</html>
